@@ -58,13 +58,19 @@ END //
 
 DELIMITER ;
 -- cau 6
-CREATE VIEW FullRevenueReport AS
-SELECT
+create view FullRevenueReport as
+select 
+    d.doctor_id,
     d.doctor_name,
-    SUM(d.salary) AS total_doctor_revenue 
-FROM doctors d
-LEFT JOIN appointments a ON d.doctor_id = a.doctor_id
-GROUP BY d.doctor_name;
+    count(a.appointment_id) as total_appointments,
+    count(distinct a.patient_id) as total_patients,
+    sum(case when a.status = 'completed' then d.salary else 0 end) as total_revenue,
+    count(p.prescription_id) as total_medicines
+from doctors d
+left join appointments a on d.doctor_id = a.doctor_id
+left join prescriptions p on a.appointment_id = p.appointment_id
+group by d.doctor_id, d.doctor_name;
+drop view FullRevenueReport;
 -- cau 7
 CALL GetDoctorDetails(1);  
 -- cau 8

@@ -51,10 +51,7 @@ BEGIN
         FROM patients
         WHERE patient_name = NEW.patient_name AND dob = NEW.dob
     ) THEN
-        
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Patient already exists';
-
-       
         INSERT INTO patient_error_log (patient_name, phone_number, error_message)
         VALUES (NEW.patient_name, NEW.phone, 'Patient already exists');
     END IF;

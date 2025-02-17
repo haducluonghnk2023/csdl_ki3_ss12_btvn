@@ -39,4 +39,4 @@ VALUES
     ('John', 'Mouse', -3, 50.00, '2023-05-01');
 
 select * from orders
-drop trigger if exists before_insert_orders;
+drop trigger if exists before_insert_orders;	

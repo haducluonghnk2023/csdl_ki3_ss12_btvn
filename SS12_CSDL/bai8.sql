@@ -91,19 +91,17 @@ END //
 
 DELIMITER ;
 -- cau 6
-CREATE VIEW PerformanceOverview AS
-SELECT
-    e.emp_id,
-    e.emp_name,
-    d.department_name,
-    e.salary,
-    (
-        SELECT COUNT(*)
-        FROM projects
-        WHERE emp_id = e.emp_id AND status = 'In Progress'
-    ) AS number_of_active_projects
-FROM employees e
-JOIN departments d ON e.dept_id = d.dept_id;
+drop view PerformanceOverview;
+create view performanceoverview as
+select 
+    p.project_id,
+    p.project_name,
+    count(e.emp_id) as employee_count,
+    datediff(p.end_date, p.start_date) as total_days,
+    p.status
+from projects p
+left join employees e on p.emp_id = e.emp_id
+group by p.project_id, p.project_name, p.start_date, p.end_date, p.status;
 -- cau 7
 -- Trường hợp 1: Lương giảm hơn 30%
 UPDATE employees SET salary = salary * 0.5 WHERE emp_id = 1;

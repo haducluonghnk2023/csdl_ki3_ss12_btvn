@@ -1,3 +1,4 @@
+USE ss12;
 create table price_changes(
 	change_id int primary key auto_increment,
     product varchar(255),
@@ -11,8 +12,8 @@ after update on orders
 for each row
 begin
 	if old.price <> new.price then
-		INSERT INTO price_changes (change_id, old_price, new_price)
-        VALUES (OLD.order_id, OLD.price, NEW.price);
+		INSERT INTO price_changes (change_id,product, old_price, new_price)
+        VALUES (OLD.order_id,OLD.product, OLD.price, NEW.price);
 	end if;
 end &&
 DELIMITER &&
